@@ -6,6 +6,8 @@ const getCategories = async () => {
   const url = `${process.env.API_URL}/categories`;
   const res = await fetch(url);
   const json = await res.json();
+  console.log("JSON: ", json); // 👈 Esto te dirá la estructura real
+
   const categories = CategoriesResponseSchema.parse(json);
   return categories;
 };
