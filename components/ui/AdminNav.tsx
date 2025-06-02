@@ -3,29 +3,32 @@ import Logo from "@/components/ui/Logo";
 
 export const AdminNav = () => {
   return (
-    <header className="px-10 py-5 bg-gray-700 flex justify-between">
-      <div className="flex gap-5 text-white">
+    <header className="bg-gradient-to-r from-purple-500 via-purple-500 to-purple-500 shadow-lg">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <Logo />
-      </div>
 
-      <div className="flex gap-2 items-center">
-        <Link
-          href={"/admin/products"}
-          className="rounded text-white font-bold p-2"
-        >
-          Productos
-        </Link>
+        <nav className="flex flex-wrap items-center gap-4">
+          <Link
+            href="/admin/products"
+            className="text-white hover:text-yellow-300 font-medium transition"
+          >
+            Productos
+          </Link>
 
-        <Link
-          href={"/admin/sales"}
-          className="rounded text-white font-bold p-2"
-        >
-          Ventas
-        </Link>
+          <Link
+            href="/admin/sales"
+            className="text-white hover:text-yellow-300 font-medium transition"
+          >
+            Ventas
+          </Link>
 
-        <Link href={"/"} className="rounded bg-purple-400 font-bold py-2 px-10">
-          Tienda
-        </Link>
+          <Link
+            href="/"
+            className="bg-yellow-300 text-gray-900 px-4 py-2 rounded-md font-semibold hover:bg-yellow-400 transition"
+          >
+            Tienda
+          </Link>
+        </nav>
       </div>
     </header>
   );

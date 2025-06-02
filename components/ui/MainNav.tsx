@@ -12,30 +12,31 @@ const getCategories = async () => {
 
 export const MainNav = async () => {
   const categories = await getCategories();
+
   return (
-    <header className="px-10 py-5 bg-gray-700 flex flex-col md:flex-row justify-between ">
-      <div className="flex justify-center">
+    <header className="bg-gradient-to-r from-purple-500 via-purple-500 to-purple-500 shadow-lg">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <Logo />
-      </div>
 
-      <nav className="flex flex-col md:flex-row gap-2 items-center mt-5 md:mt-0">
-        {categories.map((category) => (
+        <nav className="flex flex-wrap items-center gap-4">
+          {categories.map((category) => (
+            <Link
+              key={category.id}
+              href={`/${category.id}`}
+              className="text-white hover:text-yellow-300 font-medium transition"
+            >
+              {category.name}
+            </Link>
+          ))}
+
           <Link
-            key={category.id}
-            href={`/${category.id}`}
-            className="text-white hover:text-yellow-300 font-bold p-2"
+            href="/admin/sales"
+            className="bg-yellow-300 text-gray-900 px-4 py-2 rounded-md font-semibold hover:bg-yellow-400 transition"
           >
-            {category.name}{" "}
+            Panel Admin
           </Link>
-        ))}
-
-        <Link
-          href={"/admin/sales"}
-          className="rounded bg-green-400 font-bold py-2 px-10"
-        >
-          Panel de Administración
-        </Link>
-      </nav>
+        </nav>
+      </div>
     </header>
   );
 };
