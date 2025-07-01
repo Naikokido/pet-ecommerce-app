@@ -1,4 +1,5 @@
 import { CategoriesResponseSchema, Product } from "@/src/schemas";
+import UploadProductImage from "./UploadProductImage";
 
 const getCategories = async () => {
   const url = `${process.env.API_URL}/categories`;
@@ -74,6 +75,7 @@ const ProductForm = async ({ product }: { product?: Product }) => {
           ))}
         </select>
       </div>
+      <UploadProductImage currentImage={product?.image} />
     </>
   );
 };
