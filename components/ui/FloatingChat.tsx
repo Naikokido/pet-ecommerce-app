@@ -1,3 +1,4 @@
+// app/components/ui/FloatingChat.tsx
 "use client";
 
 import { useState } from "react";
@@ -6,58 +7,59 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 export default function FloatingChat() {
-    const [open, setOpen] = useState(false);
-    const [input, setInput] = useState("");
+  const [open, setOpen] = useState(false);
+  const [input, setInput] = useState("");
 
-    const toggleChat = () => setOpen(!open);
+  const toggleChat = () => setOpen(!open);
 
-    return (
-        <div className="fixed bottom-6 right-6 z-50">
-            <Button
-                onClick={toggleChat}
-                className="rounded-full h-14 w-14 p-0 shadow-lg"
-                variant="secondary"
+  return (
+    <div className="fixed bottom-6 right-6 z-50">
+      <Button
+        onClick={toggleChat}
+        className="rounded-full h-14 w-14 p-0 shadow-lg"
+        variant="secondary"
+      >
+        {open ? <X className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}
+      </Button>
+
+      <AnimatePresence mode="wait">
+        {open ? (
+          <motion.div
+            layout
+            key="chat-box"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+            className="w-80 h-96 bg-white shadow-2xl rounded-2xl absolute bottom-20 right-0 flex flex-col overflow-hidden border"
+          >
+            <div className="flex-1 p-4 space-y-3 overflow-auto text-sm">
+              <div className="text-gray-600 bg-gray-100 p-3 rounded-xl w-fit">
+                ¡Hola! ¿En qué puedo ayudarte hoy? 🐾
+              </div>
+              {/* Future dynamic messages go here */}
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setInput("");
+              }}
+              className="p-3 border-t flex items-center gap-2"
             >
-                {open ? <X className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}
-            </Button>
-
-            <AnimatePresence>
-                {open ? (
-                    <motion.div
-                        layout
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        transition={{ duration: 0.2 }}
-                        className="w-80 h-96 bg-white shadow-2xl rounded-2xl absolute bottom-20 right-0 flex flex-col overflow-hidden border"
-                    >
-                        <div className="flex-1 p-4 space-y-3 overflow-auto text-sm">
-                            <div className="text-gray-600 bg-gray-100 p-3 rounded-xl w-fit">
-                                ¡Hola! ¿En qué puedo ayudarte hoy? 🐾
-                            </div>
-                            {/* Future dynamic messages go here */}
-                        </div>
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                setInput("");
-                            }}
-                            className="p-3 border-t flex items-center gap-2"
-                        >
-                            <input
-                                type="text"
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
-                                className="flex-1 px-3 py-2 text-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-300"
-                                placeholder="Escribe tu mensaje..."
-                            />
-                            <Button type="submit" size="sm" className="px-4">
-                                Enviar
-                            </Button>
-                        </form>
-                    </motion.div>
-                ) : null}
-            </AnimatePresence>
-        </div>
-    );
-} 
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                className="flex-1 px-3 py-2 text-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                placeholder="Escribe tu mensaje..."
+              />
+              <Button type="submit" size="sm" className="px-4">
+                Enviar
+              </Button>
+            </form>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    </div>
+  );
+}
