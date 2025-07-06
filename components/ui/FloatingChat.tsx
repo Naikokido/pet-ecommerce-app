@@ -9,8 +9,56 @@ import { Button } from "@/components/ui/button";
 export default function FloatingChat() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
+  const [messages, setMessages] = useState<{ text: string; isError?: boolean }[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const toggleChat = () => setOpen(!open);
+
+  const getChatResponse = async (prompt: string) => {
+    try {
+      setLoading(true);
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}chatbot/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+        signal: AbortSignal.timeout(10000), //tiempo maximo de espera
+      });
+
+      const data = await response.json();
+
+      if (response.status === 429) {
+        setMessages((prev) => [...prev, { text: "Has llegado al límite de mensajes diarios que puedes hacer. Por favor explore el catálogo disponible.", isError: true }]);
+      } else if (response.ok) {
+        setMessages((prev) => [...prev, { text: data.answer }]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          { text: "Ocurrió un error inesperado.", isError: true },
+        ]);
+      }
+    } catch (err) {
+      console.error("Error en fetch:", err);
+      setMessages((prev) => [
+        ...prev,
+        { text: "Error de red o del servidor.", isError: true },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    setMessages((prev) => [...prev, { text: input }]);
+    await getChatResponse(input);
+    setInput("");
+  };
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -37,15 +85,16 @@ export default function FloatingChat() {
               <div className="text-gray-600 bg-gray-100 p-3 rounded-xl w-fit">
                 ¡Hola! ¿En qué puedo ayudarte hoy? 🐾
               </div>
-              {/* Future dynamic messages go here */}
+              {messages.map((msg, idx) => (
+                <div
+                  key={idx}
+                  className={`p-3 rounded-xl w-fit ${msg.isError ? "bg-red-100 text-red-700" : "bg-yellow-100 text-gray-700"}`}
+                >
+                  {msg.text}
+                </div>
+              ))}
             </div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                setInput("");
-              }}
-              className="p-3 border-t flex items-center gap-2"
-            >
+            <form onSubmit={handleSubmit} className="p-3 border-t flex items-center gap-2">
               <input
                 type="text"
                 value={input}
@@ -53,8 +102,8 @@ export default function FloatingChat() {
                 className="flex-1 px-3 py-2 text-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-300"
                 placeholder="Escribe tu mensaje..."
               />
-              <Button type="submit" size="sm" className="px-4">
-                Enviar
+              <Button type="submit" size="sm" className="px-4" disabled={loading}>
+                {loading ? "..." : "Enviar"}
               </Button>
             </form>
           </motion.div>
