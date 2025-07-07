@@ -1,8 +1,8 @@
 // app/store/[categoryId]/layout.tsx
 import { ReactNode } from "react";
 import ShoppingCart from "@/components/cart/ShoppingCart";
-import { MainNav } from "@/components/ui/MainNav";
-import ToastNotification from "@/components/ui/ToastNotification";
+// import { MainNav } from "@/components/ui/MainNav";
+// import ToastNotification from "@/components/ui/ToastNotification";
 
 interface CategoryLayoutProps {
   children: ReactNode;

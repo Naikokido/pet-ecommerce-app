@@ -1,6 +1,8 @@
 import { CategoriesResponseSchema } from "@/src/schemas";
 import Logo from "./Logo";
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { LogoutButton } from "./LogoutButton";
 
 const getCategories = async () => {
   const url = `${process.env.API_URL}/categories`;
@@ -12,6 +14,8 @@ const getCategories = async () => {
 
 export const MainNav = async () => {
   const categories = await getCategories();
+
+  const hasAuth = (await cookies()).has("token");
 
   return (
     <header className="bg-gradient-to-r from-purple-500 via-purple-500 to-purple-500 shadow-lg">
@@ -35,6 +39,26 @@ export const MainNav = async () => {
           >
             Panel Admin
           </Link>
+
+          {!hasAuth && (
+            <>
+              <Link
+                href="/login"
+                className="text-white border border-white px-4 py-2 rounded-md font-medium hover:bg-white hover:text-purple-600 transition"
+              >
+                Login
+              </Link>
+
+              <Link
+                href="/register"
+                className="text-white border border-white px-4 py-2 rounded-md font-medium hover:bg-white hover:text-purple-600 transition"
+              >
+                Register
+              </Link>
+            </>
+          )}
+
+          {hasAuth && <LogoutButton />}
         </nav>
       </div>
     </header>

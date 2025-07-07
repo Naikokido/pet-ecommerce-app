@@ -1,3 +1,5 @@
+"use client";
+
 import { submitOrder } from "@/actions/submit-order-action";
 import { useActionState, useEffect } from "react";
 import { useStore } from "@/src/store";
@@ -8,6 +10,7 @@ const SubmitOrderForm = () => {
   const coupon = useStore((state) => state.coupon.name);
   const contents = useStore((state) => state.contents);
   const clearCart = useStore((state) => state.clearCart);
+  const setOrderConfirmed = useStore((state) => state.setOrderConfirmed);
 
   const order = {
     total,
@@ -31,6 +34,7 @@ const SubmitOrderForm = () => {
     if (state.success) {
       toast.success(state.success);
       clearCart();
+      setOrderConfirmed(true);
     }
   }, [state]);
 
