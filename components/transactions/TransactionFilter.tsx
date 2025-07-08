@@ -7,7 +7,6 @@ import { getSalesByDate } from "@/src/api";
 import { useQuery } from "@tanstack/react-query";
 import TransactionSummary from "./TransactionSummary";
 import { formatCurrency } from "@/src/utils";
-import dynamic from "next/dynamic";
 import Calendar from "react-calendar";
 
 //cuando quiero que si o si renderice en el cliente
@@ -20,6 +19,7 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 const TransactionFilter = () => {
   const [date, setDate] = useState<Value>(new Date());
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   const formattedDate = format(date?.toString()!, "yyyy-MM-dd");
   const { data, isLoading } = useQuery({
     queryKey: ["sales", formattedDate],

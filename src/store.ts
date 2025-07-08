@@ -34,6 +34,7 @@ export const useStore = create<IStore>()(
   devtools((set, get) => ({
     ...initialState,
     addToCart: (product) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { id: productId, categoryId, ...data } = product;
       let contents: ShoppingCart = [];
       const duplicated = get().contents.findIndex(

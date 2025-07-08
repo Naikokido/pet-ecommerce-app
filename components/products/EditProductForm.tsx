@@ -23,7 +23,7 @@ const EditProductForm = ({ children }: { children: React.ReactNode }) => {
       toast.success(state.success);
       router.push("/admin/products");
     }
-  }, [state]);
+  }, [router, state]);
 
   return (
     <form className="space-y-5" action={dispatch}>

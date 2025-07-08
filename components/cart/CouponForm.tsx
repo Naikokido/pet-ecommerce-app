@@ -9,8 +9,8 @@ const CouponForm = () => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const couponName = formData.get("coupon_name")?.toString()!;
-    if (!couponName.length) return;
+    const couponName = formData.get("coupon_name")?.toString();
+    if (!couponName?.length) return;
     await applyCoupon(couponName as string);
   };
 

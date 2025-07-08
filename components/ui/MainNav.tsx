@@ -18,7 +18,7 @@ type User = {
   roles: string[];
 } | null;
 
-export function MainNav({ categories }: { categories?: Category[] }) {
+export function MainNav({ categories }: { categories: Category[] }) {
   const [user, setUser] = useState<User>(null);
   const [hasAuth, setHasAuth] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
