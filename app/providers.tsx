@@ -10,7 +10,7 @@ const makeQueryClient = () => {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        // Mayor a 0 para evitar volver a obtener los datos inmediatamente en el cliente.
+        // Mayor a 0 para evitar volver a obtener los datos inmediatamente en el client.
         staleTime: 60 * 1000,
       },
     },
