@@ -6,6 +6,12 @@ const categoryMap: Record<string, string> = {
   "1": "Productos / Alimentos",
   "2": "Productos / Juguetes",
   "3": "Productos / Accesorios",
+  // Admin routes
+  admin: "Panel Admin",
+  products: "Productos",
+  sales: "Ventas",
+  new: "Nuevo",
+  edit: "Editar",
 };
 
 export default function SectionBreadcrumb() {
@@ -17,9 +23,9 @@ export default function SectionBreadcrumb() {
     if (categoryMap[section]) {
       return categoryMap[section];
     }
-    // Para el resto: Capitaliza la primera letra
     return section.charAt(0).toUpperCase() + section.slice(1).toLowerCase();
   });
+
   return (
     <div className="flex flex-row text-lg text-gray-600 my-4 ml-2">
       <svg

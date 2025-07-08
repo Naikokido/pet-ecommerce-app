@@ -36,7 +36,7 @@ const SubmitOrderForm = () => {
       clearCart();
       setOrderConfirmed(true);
     }
-  }, [state]);
+  }, [clearCart, setOrderConfirmed, state]);
 
   return (
     <form action={dispatch}>

@@ -1,5 +1,8 @@
 "use client";
 
+import Footer from "@/components/ui/Footer";
+import LoginNav from "@/components/ui/LoginNav";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -8,11 +11,11 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setErrors([]);
 
     const res = await fetch("/api/register", {
       method: "POST",
@@ -23,46 +26,83 @@ export default function RegisterPage() {
     const data = await res.json();
 
     if (!res.ok) {
-      setError(data.message || "Error al registrarse");
+      if (Array.isArray(data.message)) {
+        setErrors(data.message);
+      } else if (typeof data.message === "string") {
+        setErrors(
+          data.message
+            .split(/(?=[A-ZÁÉÍÓÚ])/g)
+            .map((e: string) => e.trim())
+            .filter(Boolean)
+        );
+      } else {
+        setErrors(["Error al registrarse"]);
+      }
       return;
     }
 
-    router.refresh(); // recarga estado de la UI
+    localStorage.setItem("pet_user", JSON.stringify(data.user));
+    router.refresh();
     router.push("/");
   };
 
   return (
-    <main className="max-w-md mx-auto mt-20 p-6 bg-white shadow rounded">
-      <h1 className="text-2xl font-bold mb-4">Register</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          placeholder="Full Name"
-          className="border px-3 py-2 rounded"
-        />
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          className="border px-3 py-2 rounded"
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          className="border px-3 py-2 rounded"
-        />
-        <button
-          type="submit"
-          className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
-        >
-          Register
-        </button>
-        {error && <p className="text-red-600">{error}</p>}
-      </form>
-    </main>
+    <div className="min-h-screen flex flex-col">
+      <LoginNav />
+
+      <main className="flex-1 flex items-center justify-center bg-gray-100 px-4">
+        <div className="w-full max-w-md p-6 bg-white shadow rounded">
+          <h1 className="text-2xl font-bold mb-4 text-center">Registro</h1>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <input
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="Nombre completo"
+              className="border px-3 py-2 rounded"
+            />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              className="border px-3 py-2 rounded"
+            />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Contraseña"
+              className="border px-3 py-2 rounded"
+            />
+            <button
+              type="submit"
+              className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+            >
+              Registrarse
+            </button>
+            {errors.length > 0 && (
+              <ul className="text-red-600 text-sm list-disc pl-5">
+                {errors.map((err, i) => (
+                  <li key={i}>{err}</li>
+                ))}
+              </ul>
+            )}
+          </form>
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              ¿Ya tienes una cuenta?{" "}
+              <Link
+                href="/login"
+                className="text-purple-600 hover:underline font-medium"
+              >
+                Inicia sesión aquí
+              </Link>
+            </p>
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
   );
 }

@@ -6,10 +6,12 @@ import { MessageSquare, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
-export default function FloatingChat() {
+export const FloatingChat = () => {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<{ text: string; isError?: boolean }[]>([]);
+  const [messages, setMessages] = useState<
+    { text: string; isError?: boolean }[]
+  >([]);
   const [loading, setLoading] = useState(false);
 
   const toggleChat = () => setOpen(!open);
@@ -18,19 +20,28 @@ export default function FloatingChat() {
     try {
       setLoading(true);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}chatbot/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt }),
-        signal: AbortSignal.timeout(10000), //tiempo maximo de espera
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/chatbot/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt }),
+          signal: AbortSignal.timeout(10000), //tiempo maximo de espera
+        }
+      );
 
       const data = await response.json();
 
       if (response.status === 429) {
-        setMessages((prev) => [...prev, { text: "Has llegado al límite de mensajes diarios que puedes hacer. Por favor explore el catálogo disponible.", isError: true }]);
+        setMessages((prev) => [
+          ...prev,
+          {
+            text: "Has llegado al límite de mensajes diarios que puedes hacer. Por favor explore el catálogo disponible.",
+            isError: true,
+          },
+        ]);
       } else if (response.ok) {
         setMessages((prev) => [...prev, { text: data.answer }]);
       } else {
@@ -50,7 +61,6 @@ export default function FloatingChat() {
     }
   };
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -67,7 +77,11 @@ export default function FloatingChat() {
         className="rounded-full h-14 w-14 p-0 shadow-lg"
         variant="secondary"
       >
-        {open ? <X className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}
+        {open ? (
+          <X className="w-6 h-6" />
+        ) : (
+          <MessageSquare className="w-6 h-6" />
+        )}
       </Button>
 
       <AnimatePresence mode="wait">
@@ -88,13 +102,20 @@ export default function FloatingChat() {
               {messages.map((msg, idx) => (
                 <div
                   key={idx}
-                  className={`p-3 rounded-xl w-fit ${msg.isError ? "bg-red-100 text-red-700" : "bg-yellow-100 text-gray-700"}`}
+                  className={`p-3 rounded-xl w-fit ${
+                    msg.isError
+                      ? "bg-red-100 text-red-700"
+                      : "bg-yellow-100 text-gray-700"
+                  }`}
                 >
                   {msg.text}
                 </div>
               ))}
             </div>
-            <form onSubmit={handleSubmit} className="p-3 border-t flex items-center gap-2">
+            <form
+              onSubmit={handleSubmit}
+              className="p-3 border-t flex items-center gap-2"
+            >
               <input
                 type="text"
                 value={input}
@@ -102,7 +123,12 @@ export default function FloatingChat() {
                 className="flex-1 px-3 py-2 text-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-300"
                 placeholder="Escribe tu mensaje..."
               />
-              <Button type="submit" size="sm" className="px-4" disabled={loading}>
+              <Button
+                type="submit"
+                size="sm"
+                className="px-4"
+                disabled={loading}
+              >
                 {loading ? "..." : "Enviar"}
               </Button>
             </form>
@@ -111,4 +137,4 @@ export default function FloatingChat() {
       </AnimatePresence>
     </div>
   );
-}
+};

@@ -1,7 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import FloatingChat from "@/components/ui/FloatingChat";
-
 
 const HomePage = () => {
   return (
@@ -95,7 +93,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-      <FloatingChat />
     </div>
   );
 };
