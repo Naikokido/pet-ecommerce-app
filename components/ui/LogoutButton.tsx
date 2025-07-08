@@ -6,10 +6,9 @@ export function LogoutButton() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    const res = await fetch("/api/logout", { method: "POST" });
-    if (res.ok) {
-      router.refresh(); // recarga el estado actual
-    }
+    localStorage.removeItem("pet_user");
+    await fetch("/api/logout", { method: "POST" });
+    router.refresh();
   };
 
   return (

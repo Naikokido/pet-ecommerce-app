@@ -22,9 +22,9 @@ export async function middleware(req: NextRequest) {
 
   console.log("esto es res2 ");
   const data = await res.json();
-   console.log(data)
+  console.log(data);
   if (
-    !data.user.roles.includes("user") &&
+    !data.user.roles.includes("admin") &&
     req.nextUrl.pathname.startsWith("/admin")
   ) {
     return NextResponse.redirect(new URL("/unauthorized", req.url));
