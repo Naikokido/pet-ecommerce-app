@@ -1,9 +1,20 @@
+import Image from "next/image";
+import Link from "next/link";
+
 const Logo = () => {
   return (
-    <h1 className="text-3xl font-extrabold text-white">
-      Pet {""}
-      <span className="text-gray-400 text-xl ">Ecommerce</span>
-    </h1>
+    <Link href="/" className="flex items-center space-x-3">
+      <Image
+        src="/logo-pet.png"
+        alt="Pet Ecommerce Logo"
+        width={40}
+        height={40}
+        className="rounded-full"
+      />
+      <span className="text-2xl font-extrabold text-white">
+        Pet <span className="text-yellow-300">Ecommerce</span>
+      </span>
+    </Link>
   );
 };
 
