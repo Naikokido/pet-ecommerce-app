@@ -7,6 +7,7 @@ interface IStore {
   discount: number;
   contents: ShoppingCart;
   coupon: Coupon;
+  orderConfirmed: boolean; // ✅ nuevo
   addToCart: (product: Product) => void;
   updateQuantity: (id: Product["id"], quantity: number) => void;
   removeFromCart: (id: Product["id"]) => void;
@@ -14,6 +15,7 @@ interface IStore {
   applyCoupon: (couponName: string) => Promise<void>;
   applyDiscount: () => void;
   clearCart: () => void;
+  setOrderConfirmed: (value: boolean) => void; // ✅ nuevo
 }
 
 const initialState = {
@@ -25,6 +27,7 @@ const initialState = {
     name: "",
     message: "",
   },
+  orderConfirmed: false, // ✅ nuevo
 };
 
 export const useStore = create<IStore>()(
@@ -132,5 +135,6 @@ export const useStore = create<IStore>()(
         ...initialState,
       }));
     },
+    setOrderConfirmed: (value: boolean) => set({ orderConfirmed: value }),
   }))
 );

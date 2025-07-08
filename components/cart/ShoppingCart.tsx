@@ -1,4 +1,5 @@
 "use client";
+
 import { useStore } from "@/src/store";
 import ShoppingCartItem from "./ShoppingCartItem";
 import Amount from "./Amount";
@@ -9,10 +10,24 @@ const ShoppingCart = () => {
   const contents = useStore((state) => state.contents);
   const total = useStore((state) => state.total);
   const discount = useStore((state) => state.discount);
+  const orderConfirmed = useStore((state) => state.orderConfirmed);
+  const setOrderConfirmed = useStore((state) => state.setOrderConfirmed);
 
   return (
     <>
-      {contents.length ? (
+      {orderConfirmed ? (
+        <div className="text-center space-y-4">
+          <p className="text-2xl font-bold text-green-600">
+            ✅ ¡Tu compra fue realizada con éxito!
+          </p>
+          <button
+            onClick={() => setOrderConfirmed(false)}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded"
+          >
+            ❌ Cerrar
+          </button>
+        </div>
+      ) : contents.length ? (
         <>
           <h2 className="text-4xl font-bold text-gray-900">Resumen de venta</h2>
 
@@ -36,7 +51,7 @@ const ShoppingCart = () => {
         </>
       ) : (
         <p className="text-xl text-center text-gray-900">
-          El carrito esta vacío
+          El carrito está vacío
         </p>
       )}
     </>
