@@ -17,6 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
+      <head>
+        <meta name="description" content="Venta de productos para mascotas. Alimentos, accesorios o juguetes disponibles para perros y gatos."></meta>
+      </head>
       <body className={`${outfit.className} bg-gray-200`}>
         <Providers> {children}</Providers>
       </body>
